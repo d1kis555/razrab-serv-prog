@@ -1,5 +1,82 @@
 
-.login-button {
+.navbar-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1280px;
+    margin: 0 auto;
+    height: 120px;
+  }
+  
+  .container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+  }
+  
+
+  .navbar-bottom {
+    
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    height: 60px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-menu {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+   
+  }
+  
+  .nav-link {
+    color: #363E3E;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    padding: 10px 0;
+    white-space: nowrap;
+  }
+  
+  .nav-link:hover {
+    color: #18AEA5;
+  }
+  
+  .nav-consultation {
+    
+  }
+  
+  .button.is-primary {
+    background-color: #18aea433;
+    color: #363E3E;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    height: 40px;
+  }
+  
+  .button.is-primary:hover {
+    background-color: #149188;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  
+
+  .login-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -11,9 +88,7 @@
     margin-left: 10px;
   }
   
-  .login-button:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
+
   
   .login-button img {
     width: 50px;
@@ -21,20 +96,10 @@
     object-fit: contain;
   }
   
-
-  .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
-    max-width: 1280px;
-    margin: 0 auto;
-    height: 120px !important;
-  }
-  
   .logo {
     min-width: 120px;
     min-height: 120px;
+    margin-left: -40px;
   }
   
   .header-text {
@@ -88,7 +153,8 @@
   }
   
   .button.is-light:hover {
-    background-color: #45a049;
+    background-color: #2d5bbd;
     transform: translateY(-1px);
+    color: white;
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   }

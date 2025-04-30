@@ -1,0 +1,91 @@
+.services-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1280px;
+    margin: 40px auto;
+    
+  }
+  
+  .service-card {
+    width: 296px;
+    height: 200px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+    padding: 20px;
+    display: grid;
+    grid-template-areas: 
+      "icon ."
+      "title arrow";
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 1fr auto;
+  }
+  
+  .service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .service-icon {
+    grid-area: icon;
+    align-self: start;
+    justify-self: start;
+    width: 60px;
+    height: 60px;
+  }
+  
+  .service-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+
+  .service-title {
+    grid-area: title;
+    align-self: end;
+    justify-self: start;
+    color: #363E3E;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    text-align: left;
+    padding-bottom: 5px;
+  }
+  
+
+  .service-arrow {
+    grid-area: arrow;
+    align-self: end;
+    justify-self: end;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+  
+  .service-card:hover .service-arrow {
+    opacity: 1;
+  }
+  
+
+  @media (max-width: 1200px) {
+    .services-container {
+      grid-template-columns: repeat(2, 1fr);
+      justify-items: center;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .services-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .service-card {
+      width: 100%;
+      max-width: 296px;
+    }
+  }
