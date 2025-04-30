@@ -1,0 +1,94 @@
+
+.login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+  }
+  
+  .login-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-button img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+  }
+  
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    max-width: 1280px;
+    margin: 0 auto;
+    height: 120px !important;
+  }
+  
+  .logo {
+    min-width: 120px;
+    min-height: 120px;
+  }
+  
+  .header-text {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    color: #99a6ac;
+    font-weight: 100;
+    font-style: italic;
+    width: 200px;
+    margin-right: 35px;
+  }
+  
+  .navbar-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-end {
+    display: flex;
+    align-items: center;
+  }
+  
+  .working-hours {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    margin-right: 20px;
+    margin-top: 20px;
+  }
+  
+  .hours-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0 10px;
+  }
+  
+  .button.is-light {
+    background-color: #3a64bf42;
+    color: #3A65BF;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    height: 50px;
+    width: 200px;
+  }
+  
+  .button.is-light:hover {
+    background-color: #45a049;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
