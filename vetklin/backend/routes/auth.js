@@ -2,7 +2,7 @@ const express = require('express');
 const authController = require('../controllers/auth');
 const authMiddleware = require('../middlewares/auth');
 const router = express.Router();
-
+router.get('/telegram/generate-token', authMiddleware, authController.generateAuthToken);
 router.post('/telegram/generate-token', authMiddleware, authController.generateAuthToken);
 router.get('/telegram/check-status', authMiddleware, authController.checkAuthStatus);
 router.post('/login', authController.login);

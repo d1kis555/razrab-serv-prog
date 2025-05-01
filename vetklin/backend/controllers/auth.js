@@ -6,16 +6,20 @@ exports.generateAuthToken = async (req, res) => {
   try {
     const token = crypto.randomBytes(20).toString('hex');
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // Токен действует 15 минут
-    
-    await User.findByIdAndUpdate(req.user.id, {
+
+    const tempUser = new User({
+      username: `telegram_temp_${token}`,
+      password: 'telegram_temp_password',
       telegramAuthToken: token,
       telegramAuthTokenExpires: expiresAt
     });
 
-    res.json({ 
+    await tempUser.save();
+
+    res.json({
       token,
       authUrl: `https://t.me/${process.env.TELEGRAM_BOT_NAME}?start=auth_${token}`,
-      expiresAt 
+      expiresAt
     });
   } catch (error) {
     console.error('Error generating auth token:', error);

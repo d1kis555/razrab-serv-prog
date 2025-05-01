@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { QRCodeSVG } from 'qrcode.react'; // Измененный импорт
+import { QRCodeSVG } from 'qrcode.react';
 
 const LoginPage = () => {
   const [mode, setMode] = useState('login');
@@ -36,20 +36,17 @@ const LoginPage = () => {
 
   const handleTelegramAuth = async () => {
     try {
-      setLoading(true);
-      const response = await axios.get('/api/telegram/generate-token');
+      const response = await axios.get('http://localhost:3001/api/telegram/generate-token');
       setAuthData({
-        token: response.data.token,
         authUrl: response.data.authUrl,
+        token: response.data.token,
         expiresAt: new Date(response.data.expiresAt)
       });
     } catch (error) {
       setError('Ошибка при получении QR-кода');
       console.error('Telegram auth error:', error);
-    } finally {
-      setLoading(false);
     }
-  };
+  };  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,7 +56,7 @@ const LoginPage = () => {
     try {
       const endpoint = mode === 'login' ? 'http://localhost:3001/api/login' : 'http://localhost:3001/api/register';
       const response = await axios.post(endpoint, formData);
-      
+
       localStorage.setItem('token', response.data.token);
       navigate('/');
     } catch (error) {
@@ -75,15 +72,15 @@ const LoginPage = () => {
       {authData ? (
         <div className="telegram-auth">
           <h3>Авторизация через Telegram</h3>
-          <QRCodeSVG 
-            value={authData.authUrl} 
-            size={200} 
+          <QRCodeSVG
+            value={authData.authUrl}
+            size={200}
             level="H"
             includeMargin={true}
           />
           <p>Или перейдите по ссылке: <a href={authData.authUrl}>{authData.authUrl}</a></p>
           <p>Токен действителен до: {authData.expiresAt.toLocaleTimeString()}</p>
-          <button 
+          <button
             onClick={() => setAuthData(null)}
             disabled={loading}
           >
@@ -114,13 +111,13 @@ const LoginPage = () => {
             </button>
           </form>
           <div className="auth-options">
-            <button 
+            <button
               onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
               disabled={loading}
             >
               {mode === 'login' ? 'Нет аккаунта? Зарегистрироваться' : 'Уже есть аккаунт? Войти'}
             </button>
-            <button 
+            <button
               onClick={handleTelegramAuth}
               disabled={loading}
             >
