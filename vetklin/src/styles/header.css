@@ -1,19 +1,24 @@
-
-.navbar-top {
+  .header{
+    background-color: white;
+  }
+  
+  
+  .navbar-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 1280px;
+    
     margin: 0 auto;
     height: 120px;
+    background-color: #FFFFFF; 
   }
   
   .container {
-    width: 100%;
+    max-width: 1280px !important;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
+    background-color: #FFFFFF; 
   }
   
 
@@ -23,6 +28,7 @@
     height: 60px;
     display: flex;
     align-items: center;
+    background-color: #FFFFFF; 
   }
   
   .navbar-menu {
@@ -99,7 +105,7 @@
   .logo {
     min-width: 120px;
     min-height: 120px;
-    margin-left: -40px;
+    margin-left: -30px;
   }
   
   .header-text {
@@ -147,7 +153,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     margin: 0 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    
     height: 50px;
     width: 200px;
   }
