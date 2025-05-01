@@ -1,12 +1,17 @@
 import React from 'react';
 import Banner from '../components/banner';
 import ServicesBlock from '../components/services-block';
+import SpecialistsSection from '../components/specialists-section'; 
+import ServicesSectionmain from '../components/services-section-2';
+
 
 const HomePage = () => {
   return (
     <div className="home-page">
       <Banner />
       <ServicesBlock />
+      <SpecialistsSection /> 
+      <ServicesSectionmain />
     </div>
   );
 };

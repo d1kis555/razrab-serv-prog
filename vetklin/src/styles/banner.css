@@ -1,193 +1,259 @@
-/* src/components/Banner/banner.css */
 
 .promo-banner {
-    position: relative;
-    width: 100%;
-    max-width: 1280px;
-    margin: 40px auto;
-    height: 550px;
-    overflow: visible;
-  }
-  
-  .banner-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    
-    background-size: cover;
-    background-position: center;
-    border-radius: 20px;
-    
-    overflow: hidden;
-  }
-  
+  position: relative;
+  width: 100%;
+  width: 1280px;
+  margin: 0 auto;
+  border-radius: 30px;
+  overflow: hidden;
+  padding-left: 10px;
+  padding-right: 10px;
+}
 
-  .banner-container::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    ;
-    z-index: 1;
+.banner-slide {
+  outline: none;
+}
+
+.banner-container {
+  position: relative;
+  width: 1280px;
+  height: 550px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 30px;
+}
+
+
+.banner-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1280px;
+  height: 100%;
+
+  z-index: 1;
+}
+
+.banner-content {
+  position: absolute;
+  top: 50%;
+  left: 60px;
+  transform: translateY(-50%);
+  max-width: 900px;
+  z-index: 2;
+}
+
+
+.promo-tag {
+  display: inline-block;
+  background-color: rgba(58, 101, 191, 0.1);
+  color: #3A65BF;
+  padding: 8px 25px;
+  border-radius: 30px;
+  font-size: 27px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(58, 101, 191, 0.2);
+}
+
+.promo-title {
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #363E3E;
+  margin-bottom: 15px;
+}
+
+.promo-discount {
+  font-size: 40px;
+  font-weight: 900;
+  margin-bottom: 30px;
+  color: #363E3E;
+}
+
+.promo-button {
+  background-color: #3A65BF;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 18px 50px;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(58, 101, 191, 0.4);
+}
+
+.promo-button:hover {
+  background-color: #2d5bbd;
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(58, 101, 191, 0.6);
+}
+
+
+.slick-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  cursor: pointer;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.slick-arrow svg {
+  transition: all 0.3s;
+}
+
+.slick-arrow:hover svg circle {
+  stroke-opacity: 0.3;
+}
+
+.slick-arrow:hover svg path {
+  stroke: #18AEA5;
+}
+
+.next-arrow {
+  right: 30px;
+}
+
+.prev-arrow {
+  left: 30px;
+}
+
+
+.banner-dots-container {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.banner-dots-container ul {
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+
+.banner-dots-container li {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.banner-dots-container li button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  border: none;
+  font-size: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.banner-dots-container li.slick-active button {
+  background: white;
+  width: 30px;
+  border-radius: 6px;
+}
+
+
+@media (max-width: 1200px) {
+  .banner-container {
+    height: 500px;
   }
   
   .banner-content {
-    position: absolute;
-    top: 50%;
-    left: 60px;
-    transform: translateY(-50%);
-    color: white;
-    max-width: 500px;
-    z-index: 2;
-  }
-  
-  .promo-tag {
-    display: inline-block;
-    
-    color: #3A65BF;
-    
-  
-    font-size: 27px;
-    font-weight: 500;
-    margin-bottom: 5px;
-    
-    letter-spacing: 1px;
-    
+    max-width: 80%;
   }
   
   .promo-title {
-    font-size: 48px;
-    font-weight: 600;
-    
-    line-height: 1.2;
-    color: #363E3E;
-    width:900px;
+    font-size: 42px;
   }
   
   .promo-discount {
-    font-size: 40px;
-    font-weight: 900;
-    margin-bottom: 30px;
-    color: #363E3E;
-    
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-container {
+    height: 400px;
+  }
+  
+  .banner-content {
+    left: 30px;
+    max-width: 85%;
+  }
+  
+  .promo-tag {
+    font-size: 22px;
+  }
+  
+  .promo-title {
+    font-size: 32px;
+  }
+  
+  .promo-discount {
+    font-size: 28px;
   }
   
   .promo-button {
-    background-color: #3A65BF;
-    color: white;
-    border: none;
-    border-radius: 30px;
-    padding: 16px 45px;
+    padding: 14px 40px;
     font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 4px 15px rgba(58, 101, 191, 0.4);
-    text-transform: uppercase;
-    letter-spacing: 1px;
   }
   
-  .promo-button:hover {
-    background-color: #2d5bbd;
-    transform: translateY(-3px);
-    box-shadow: 0 7px 20px rgba(58, 101, 191, 0.6);
+  .slick-arrow {
+    width: 50px;
+    height: 50px;
   }
   
-  .banner-nav {
-    position: absolute;
-    top: 50%;
-    left: -25px;
-    right: -25px;
-    transform: translateY(-50%);
-    display: flex;
-    justify-content: space-between;
-    z-index: 3;
+  .next-arrow {
+    right: 15px;
   }
   
-  .nav-arrow {
-    background-color: white;
-    border: none;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-    opacity: 0.9;
+  .prev-arrow {
+    left: 15px;
   }
-  
-  .nav-arrow:hover {
-    background-color: #18AEA5;
-    transform: scale(1.1);
-    opacity: 1;
-  }
-  
-  .nav-arrow .arrow-icon {
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .nav-arrow:hover .arrow-icon {
-    color: white;
-  }
-  
+}
 
-  @media (max-width: 768px) {
-    .promo-banner {
-      height: 300px;
-      margin: 20px auto;
-    }
-    
-    .banner-content {
-      left: 30px;
-      max-width: 80%;
-    }
-    
-    .promo-title {
-      font-size: 32px;
-    }
-    
-    .promo-discount {
-      font-size: 28px;
-    }
-    
-    .promo-button {
-      padding: 12px 30px;
-      font-size: 16px;
-    }
-    
-    .nav-arrow {
-      width: 50px;
-      height: 50px;
-    }
+@media (max-width: 480px) {
+  .banner-container {
+    height: 350px;
   }
   
-  @media (max-width: 480px) {
-    .promo-banner {
-      height: 250px;
-    }
-    
-    .banner-content {
-      left: 20px;
-    }
-    
-    .promo-tag {
-      font-size: 14px;
-      padding: 6px 15px;
-    }
-    
-    .promo-title {
-      font-size: 24px;
-    }
-    
-    .promo-discount {
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
+  .banner-content {
+    left: 20px;
+    max-width: 90%;
   }
+  
+  .promo-tag {
+    font-size: 18px;
+    padding: 5px 15px;
+  }
+  
+  .promo-title {
+    font-size: 26px;
+  }
+  
+  .promo-discount {
+    font-size: 22px;
+  }
+  
+  .promo-button {
+    padding: 12px 30px;
+    font-size: 16px;
+  }
+  
+  .banner-dots-container {
+    bottom: 20px;
+  }
+}
