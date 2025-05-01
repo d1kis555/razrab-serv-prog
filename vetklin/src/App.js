@@ -8,6 +8,7 @@ import ProcedurePreparationPage from './pages/ProcedurePreparationPage';
 import VaccinationPage from './pages/VaccinationPage';
 import SpecialistPage from './pages/SpecialistPage'; 
 import './App.css';
+import Footer from './components/footer';
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
             <Route path="/specialist/:id" element={<SpecialistPage />} />
           </Routes>
         </main>
+        <Footer />
       </div>
     </Router>
   );
