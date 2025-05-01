@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отзыв для врача</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .doctor-section, .feedback-form {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .doctor-option {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            min-height: 100px;
+            margin-bottom: 10px;
+        }
+        select, button {
+            padding: 8px 12px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Выберите врача для отзыва</h1>
+
+    <div class="doctor-section">
+        <div class="doctor-option">
+            <input type="radio" name="doctor" id="doctor1" value="Иванова А.П.">
+            <label for="doctor1">Иванова Анна Петровна (терапевт)</label>
+        </div>
+
+        <div class="doctor-option">
+            <input type="radio" name="doctor" id="doctor2" value="Сидоров В.И.">
+            <label for="doctor2">Сидоров Владимир Игоревич (хирург)</label>
+        </div>
+
+        <div class="doctor-option">
+            <input type="radio" name="doctor" id="doctor3" value="Петрова Е.С.">
+            <label for="doctor3">Петрова Екатерина Сергеевна (кардиолог)</label>
+        </div>
+    </div>
+
+    <div id="feedbackForm" class="hidden">
+        <h2>Форма отзыва</h2>
+        <form action="submit_review" method="post">
+            <input type="hidden" id="selectedDoctor" name="doctor" value="">
+            <div class="form-group">
+                <label for="feedbackText">Ваш отзыв:</label>
+                <textarea id="feedbackText" name="feedback" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="rating">Оценка:</label>
+                <select id="rating" name="rating" required>
+                    <option value="">Выберите оценку</option>
+                    <option value="5">Отлично (5)</option>
+                    <option value="4">Хорошо (4)</option>
+                    <option value="3">Удовлетворительно (3)</option>
+                    <option value="2">Плохо (2)</option>
+                    <option value="1">Ужасно (1)</option>
+                </select>
+            </div>
+
+            <button type="submit">Отправить отзыв</button>
+        </form>
+    </div>
+
+    <script>
+
+        const doctorRadios = document.querySelectorAll('input[name="doctor"]');
+        const feedbackForm = document.getElementById('feedbackForm');
+        const doctorInput = document.getElementById('selectedDoctor'); // Добавьте эту строку
+
+        doctorRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if(e.target.checked) {
+                    feedbackForm.classList.remove('hidden');
+                    const selectedDoctor = e.target.value;
+                    doctorInput.value = selectedDoctor; // Добавьте эту строку
+                    console.log('Выбран врач:', selectedDoctor);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
