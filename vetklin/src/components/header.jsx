@@ -2,7 +2,6 @@ import React from 'react';
 import logo from '../assets/image/logo.png';
 import loginIcon from '../assets/image/login-icon.png';
 import '../styles/header.css';
-
 const Header = () => {
   return (
     <header>
