@@ -3,6 +3,7 @@ import Banner from '../components/banner';
 import ServicesBlock from '../components/services-block';
 import SpecialistsSection from '../components/specialists-section'; 
 import ServicesSectionmain from '../components/services-section-2';
+import Contacts from '../components/contacts';
 
 
 const HomePage = () => {
@@ -12,6 +13,7 @@ const HomePage = () => {
       <ServicesBlock />
       <SpecialistsSection /> 
       <ServicesSectionmain />
+      <Contacts />
     </div>
   );
 };

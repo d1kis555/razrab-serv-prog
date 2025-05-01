@@ -1,0 +1,132 @@
+.contacts-container {
+    width: 1280px;
+    margin: 0 auto;
+    margin-bottom: 40px;
+  }
+  
+  .contacts-title {
+    font-family: 'Onest', sans-serif;
+    font-size: 45px;
+    color: #363E3E;
+    text-align: left;
+    margin-bottom: 40px;
+    font-weight: 500;
+  }
+  
+  .contacts-content {
+    display: flex;
+    gap: 70px;
+    
+  }
+  
+  .map-container {
+    width: 900px;
+    border-radius: 20px;
+    height: 500px;
+  }
+  
+  .info-plate {
+    background-color: white;
+    padding: 20px;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .working-hours {
+   
+  }
+  
+  .hours-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  
+  .addresses {
+    display: flex;
+    gap: 40px;
+  }
+  
+  .address {
+    width: 250px;
+  }
+  
+  .address h4 {
+    margin-bottom: 5px;
+  }
+  
+  .address p {
+    margin: 3px 0;
+  }
+  
+  .map-iframe-container {
+    height: 400px;
+    margin-top: 0;
+  }
+  
+  .feedback-form {
+    width: 300px;
+    padding: 20px;
+    height: 500px;
+    background-color: white;
+    border-radius: 20px;
+  }
+  
+  .feedback-form h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 25px;
+    font-family: 'Onest';
+    font-weight: 500;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    height: 50px;
+  }
+  
+  .form-group textarea {
+    height: 100px;
+    resize: vertical;
+  }
+  
+  button[type="submit"] {
+    background-color: #3a65bf;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+    height: 50px;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  
+  .consent-text {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 10px;
+    text-align: center;
+  }
