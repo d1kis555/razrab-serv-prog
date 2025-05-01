@@ -54,7 +54,7 @@ const Header = () => {
             <a href="/contacts" className="nav-link">Контакты</a>
             
             <div className="nav-consultation">
-              <button className="button is-primary">Онлайн консультация</button>
+              <button className="button is-primary">Форум</button>
             </div>
           </div>
         </div>

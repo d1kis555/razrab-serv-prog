@@ -56,9 +56,7 @@
     color: #18AEA5;
   }
   
-  .nav-consultation {
-    
-  }
+
   
   .button.is-primary {
     background-color: #18aea433;
@@ -70,6 +68,8 @@
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
+    width: 120px;
+    height: 35px !important;
     transition: all 0.3s ease;
 
     height: 40px;
@@ -139,6 +139,7 @@
     display: grid;
     grid-template-columns: auto auto;
     gap: 0 10px;
+    width: 200px;
   }
   
   .button.is-light {
