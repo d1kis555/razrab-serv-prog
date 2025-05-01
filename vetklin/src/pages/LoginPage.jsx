@@ -1,73 +1,61 @@
-// Создайте компонент LoginPage.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
-  const [mode, setMode] = useState('login'); // 'login', 'register', 'telegram', 'google'
-  const [formData, setFormData] = useState({ username: '', email: '', password: '' });
-  const [qrCode, setQrCode] = useState('');
+  const [mode, setMode] = useState('login');
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [qrCode, setQrCode] = useState(null);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleTelegramAuth = async () => {
     try {
-      const endpoint = mode === 'login' ? '/api/auth/login' : '/api/auth/register';
-      const { data } = await axios.post(endpoint, formData);
-      localStorage.setItem('token', data.token);
-      navigate('/account');
+      const { data } = await axios.get('/api/auth/telegram/qr');
+      setQrCode(data.qrImage); // Сохраняем QR-код в состоянии
     } catch (error) {
-      console.error('Auth error:', error);
+      console.error('Ошибка при получении QR-кода:', error);
     }
   };
 
-  const handleGoogleAuth = () => {
-    window.location.href = '/api/auth/google';
-  };
-
-  const handleTelegramAuth = async () => {
-    const { data } = await axios.get('/api/auth/telegram/qr');
-    setQrCode(data.qrImage);
-    // Здесь нужно реализовать polling для проверки авторизации
-  };
-
+    
+  
   return (
-    <div className="login-container">
-      {mode === 'telegram' && qrCode ? (
+    <div className="auth-container">
+      {qrCode ? (
         <div className="telegram-auth">
-          <img src={qrCode} alt="Telegram QR Code" />
-          <p>Отсканируйте QR-код в Telegram</p>
+          <h3>Авторизация через Telegram</h3>
+          <img src={qrCode} alt="Telegram QR Code" style={{ width: '200px' }} />
+          <p>Отсканируйте QR-код в приложении Telegram</p>
+          <button onClick={() => setQrCode(null)}>Назад</button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit}>
-          {mode === 'register' && (
+        <>
+          <h2>{mode === 'login' ? 'Вход' : 'Регистрация'}</h2>
+          <form>
             <input
-              type="text"
-              placeholder="Username"
-              onChange={(e) => setFormData({...formData, username: e.target.value})}
+              type="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
             />
-          )}
-          <input
-            type="email"
-            placeholder="Email"
-            onChange={(e) => setFormData({...formData, email: e.target.value})}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setFormData({...formData, password: e.target.value})}
-          />
-          <button type="submit">{mode === 'login' ? 'Войти' : 'Зарегистрироваться'}</button>
-        </form>
+            <input
+              type="password"
+              placeholder="Пароль"
+              value={formData.password}
+              onChange={(e) => setFormData({...formData, password: e.target.value})}
+            />
+            <button type="submit">
+              {mode === 'login' ? 'Войти' : 'Зарегистрироваться'}
+            </button>
+          </form>
+          <div className="auth-options">
+            <button onClick={() => setMode(mode === 'login' ? 'register' : 'login')}>
+              {mode === 'login' ? 'Нет аккаунта? Зарегистрироваться' : 'Уже есть аккаунт? Войти'}
+            </button>
+            <button onClick={handleTelegramAuth}>Войти через Telegram</button>
+          </div>
+        </>
       )}
-      
-      <div className="auth-options">
-        <button onClick={() => setMode(mode === 'login' ? 'register' : 'login')}>
-          {mode === 'login' ? 'Нет аккаунта? Зарегистрироваться' : 'Уже есть аккаунт? Войти'}
-        </button>
-        <button onClick={handleGoogleAuth}>Войти через Google</button>
-        <button onClick={handleTelegramAuth}>Войти через Telegram</button>
-      </div>
     </div>
   );
 };
