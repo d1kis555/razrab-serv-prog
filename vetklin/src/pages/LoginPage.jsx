@@ -109,161 +109,170 @@ const ToggleText = styled.p`
   }
 `;
 
-  const LoginPage = () => {
-    const [mode, setMode] = useState('login');
-    const [formData, setFormData] = useState({
-      username: '',  // Changed from email to username
-      password: '',
-      confirmPassword: ''
+const LoginPage = ({ setIsAuthenticated }) => {
+  const [mode, setMode] = useState('login');
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [errors, setErrors] = useState({
+    username: '',
+    password: '',
+    confirmPassword: '',
+    general: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Валидация
+    if (!formData.username || !formData.password) {
+      setErrors({
+        ...errors,
+        general: 'Имя пользователя и пароль обязательны'
+      });
+      setLoading(false);
+      return;
+    }
+
+    if (mode === 'register' && formData.password !== formData.confirmPassword) {
+      setErrors({
+        ...errors,
+        password: 'Пароли не совпадают',
+        confirmPassword: 'Пароли не совпадают',
+        general: 'Пароли не совпадают'
+      });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const endpoint = mode === 'login' ? '/api/login' : '/api/register';
+      const response = await axios.post(`http://localhost:3001${endpoint}`, {
+        username: formData.username,
+        password: formData.password
+      });
+
+      // Сохраняем токен и обновляем состояние аутентификации
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('username', formData.username);
+      setIsAuthenticated(true);
+
+      // Перенаправляем в личный кабинет
+      navigate('/user');
+    } catch (error) {
+      console.error('Ошибка авторизации:', error.response?.data || error.message);
+
+      let serverError = error.response?.data?.error ||
+                        error.response?.data?.message ||
+                        'Произошла ошибка при авторизации';
+
+      if (error.response?.status === 401) {
+        serverError = 'Неверное имя пользователя или пароль';
+      } else if (error.response?.status === 400) {
+        if (error.response.data?.message?.includes('username')) {
+          serverError = 'Пользователь с таким именем не найден';
+        } else if (error.response.data?.message?.includes('password')) {
+          serverError = 'Неверный пароль';
+        }
+      }
+
+      setErrors({
+        ...errors,
+        general: serverError
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
     });
-    const [errors, setErrors] = useState({
+  };
+
+  const toggleMode = () => {
+    setMode(mode === 'login' ? 'register' : 'login');
+    setErrors({
       username: '',
       password: '',
       confirmPassword: '',
       general: ''
     });
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      setLoading(true);
-  
-      // Validate required fields
-      if (!formData.username || !formData.password) {
-        setErrors({
-          ...errors,
-          general: 'Username and password are required'
-        });
-        setLoading(false);
-        return;
-      }
-  
-      if (mode === 'register' && formData.password !== formData.confirmPassword) {
-        setErrors({
-          ...errors,
-          password: 'Passwords do not match',
-          confirmPassword: 'Passwords do not match',
-          general: 'Passwords do not match'
-        });
-        setLoading(false);
-        return;
-      }
-  
-      try {
-        const endpoint = mode === 'login' ? '/api/login' : '/api/register';
-        const dataToSend = {
-          username: formData.username,  // Using username instead of email
-          password: formData.password
-        };
-  
-        const response = await axios.post(`http://localhost:3001${endpoint}`, dataToSend);
-        
-        if (response.data.token) {
-          localStorage.setItem('token', response.data.token);
-          navigate('/');
-        } else {
-          throw new Error('No token received from server');
-        }
-      } catch (error) {
-        console.error('Auth error:', error.response?.data || error.message);
-        
-        const serverError = error.response?.data?.error || 
-                           error.response?.data?.message || 
-                           'Authentication failed';
-        
-        setErrors({
-          ...errors,
-          general: serverError
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      setFormData({
-        ...formData,
-        [name]: value
-      });
-    };
-  
-    const toggleMode = () => {
-      setMode(mode === 'login' ? 'register' : 'login');
-      setErrors({
-        username: '',
-        password: '',
-        confirmPassword: '',
-        general: ''
-      });
-    };
-  
-    return (
-      <AuthContainer>
-        <AuthWindow>
-          <Title>{mode === 'login' ? 'Login' : 'Register'}</Title>
-          
-          {errors.general && <ErrorText style={{ marginBottom: '20px' }}>{errors.general}</ErrorText>}
-          
-          <form onSubmit={handleSubmit}>
-            <InputField
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
-              onChange={handleInputChange}
-              required
-              error={!!errors.username}
-            />
-            {errors.username && <ErrorText>{errors.username}</ErrorText>}
-            
-            <InputField
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleInputChange}
-              required
-              error={!!errors.password}
-            />
-            {errors.password && <ErrorText>{errors.password}</ErrorText>}
-  
-            {mode === 'register' && (
-              <>
-                <InputField
-                  type="password"
-                  name="confirmPassword"
-                  placeholder="Confirm Password"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  required
-                  error={!!errors.confirmPassword}
-                />
-                {errors.confirmPassword && <ErrorText>{errors.confirmPassword}</ErrorText>}
-              </>
-            )}
-            
-            <ButtonGroup>
-              <PrimaryButton type="submit" disabled={loading}>
-                {loading ? 'Loading...' : mode === 'login' ? 'Login' : 'Register'}
-              </PrimaryButton>
-              <SecondaryButton 
-                type="button" 
-                onClick={toggleMode}
-                disabled={loading}
-              >
-                {mode === 'login' ? 'Register' : 'Login'}
-              </SecondaryButton>
-            </ButtonGroup>
-          </form>
-          
-          <ToggleText onClick={toggleMode}>
-            {mode === 'login' ? 'Need an account? Register' : 'Already have an account? Login'}
-          </ToggleText>
-        </AuthWindow>
-      </AuthContainer>
-    );
   };
-  
-  export default LoginPage;
+
+  return (
+    <AuthContainer>
+      <AuthWindow>
+        <Title>{mode === 'login' ? 'Вход в личный кабинет' : 'Регистрация'}</Title>
+
+        {errors.general && <ErrorText style={{ marginBottom: '20px' }}>{errors.general}</ErrorText>}
+
+        <form onSubmit={handleSubmit}>
+          <InputField
+            type="text"
+            name="username"
+            placeholder="Имя пользователя"
+            value={formData.username}
+            onChange={handleInputChange}
+            required
+            error={!!errors.username}
+          />
+          {errors.username && <ErrorText>{errors.username}</ErrorText>}
+
+          <InputField
+            type="password"
+            name="password"
+            placeholder="Пароль"
+            value={formData.password}
+            onChange={handleInputChange}
+            required
+            error={!!errors.password}
+          />
+          {errors.password && <ErrorText>{errors.password}</ErrorText>}
+
+          {mode === 'register' && (
+            <>
+              <InputField
+                type="password"
+                name="confirmPassword"
+                placeholder="Подтвердите пароль"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                required
+                error={!!errors.confirmPassword}
+              />
+              {errors.confirmPassword && <ErrorText>{errors.confirmPassword}</ErrorText>}
+            </>
+          )}
+
+          <ButtonGroup>
+            <PrimaryButton type="submit" disabled={loading}>
+              {loading ? 'Загрузка...' : mode === 'login' ? 'Войти' : 'Зарегистрироваться'}
+            </PrimaryButton>
+            <SecondaryButton
+              type="button"
+              onClick={toggleMode}
+              disabled={loading}
+            >
+              {mode === 'login' ? 'Регистрация' : 'Войти'}
+            </SecondaryButton>
+          </ButtonGroup>
+        </form>
+
+        <ToggleText onClick={toggleMode}>
+          {mode === 'login' ? 'Нет аккаунта? Пройдите регистрацию' : 'Уже есть аккаунт? Войдите'}
+        </ToggleText>
+      </AuthWindow>
+    </AuthContainer>
+  );
+};
+
+export default LoginPage;
