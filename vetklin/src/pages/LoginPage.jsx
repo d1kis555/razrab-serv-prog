@@ -79,15 +79,15 @@ const ButtonGroup = styled.div`
 `;
 
 const PrimaryButton = styled.button`
-  width: 267px;
-  height: 62px;
+  width: 267px !important;
+  height: 62px !important;
   background-color: #3A65BF;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  color: white !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-size: 18px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s !important;
 
   &:hover {
     background-color: #2a4d9b;
