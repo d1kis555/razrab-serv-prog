@@ -27,6 +27,7 @@
     "react-slick": "^0.30.3",
     "reflect-metadata": "^0.2.2",
     "slick-carousel": "^1.8.1",
+    "styled-components": "^6.1.17",
     "typeorm": "^0.3.22",
     "web-vitals": "^2.1.4"
   },
