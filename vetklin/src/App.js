@@ -6,7 +6,8 @@ import OnlineConsultationPage from './pages/OnlineConsultationPage';
 import RoutineCheckupPage from './pages/RoutineCheckupPage';
 import ProcedurePreparationPage from './pages/ProcedurePreparationPage';
 import VaccinationPage from './pages/VaccinationPage';
-import SpecialistPage from './pages/SpecialistPage'; 
+import SpecialistPage from './pages/SpecialistPage';
+import LoginPage from './pages/LoginPage'; 
 import './App.css';
 import Footer from './components/footer';
 
@@ -24,6 +25,7 @@ const App = () => {
             <Route path="/procedure-preparation" element={<ProcedurePreparationPage />} />
             <Route path="/vaccination" element={<VaccinationPage />} />
             <Route path="/specialist/:id" element={<SpecialistPage />} />
+            <Route path="/login" element={<LoginPage />} />
           </Routes>
         </main>
         <Footer />
