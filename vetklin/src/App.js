@@ -10,6 +10,9 @@ import SpecialistPage from './pages/SpecialistPage';
 import './App.css';
 import Footer from './components/footer';
 import AdminLayout from './pages/admin/AdminLayout';
+import AdminRouter from './pages/admin/AdminRouter';
+import PrivateRoute from './components/PrivateRoute';
+import { AuthProvider } from './contexts/AuthContext';
 
 const App = () => {
   return (
@@ -25,7 +28,15 @@ const App = () => {
             <Route path="/procedure-preparation" element={<ProcedurePreparationPage />} />
             <Route path="/vaccination" element={<VaccinationPage />} />
             <Route path="/specialist/:id" element={<SpecialistPage />} />
-            <Route path="/admin-panel/*" element={ <PrivateRoute><AdminLayout/></PrivateRoute>}/>
+            <Route
+  path="/admin-panel/*"
+  element={
+    <PrivateRoute>
+      <AdminLayout />
+      <AdminRouter />
+    </PrivateRoute>
+  }
+/>
           </Routes>
         </main>
         <Footer />
