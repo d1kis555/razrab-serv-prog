@@ -9,6 +9,7 @@ import VaccinationPage from './pages/VaccinationPage';
 import SpecialistPage from './pages/SpecialistPage'; 
 import './App.css';
 import Footer from './components/footer';
+import AdminLayout from './pages/admin/AdminLayout';
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
             <Route path="/procedure-preparation" element={<ProcedurePreparationPage />} />
             <Route path="/vaccination" element={<VaccinationPage />} />
             <Route path="/specialist/:id" element={<SpecialistPage />} />
+            <Route path="/admin-panel/*" element={ <PrivateRoute><AdminLayout/></PrivateRoute>}/>
           </Routes>
         </main>
         <Footer />
