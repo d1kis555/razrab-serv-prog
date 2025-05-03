@@ -157,12 +157,11 @@ const LoginPage = ({ setIsAuthenticated }) => {
         password: formData.password
       });
 
-      // Сохраняем токен и обновляем состояние аутентификации
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('username', formData.username);
       setIsAuthenticated(true);
 
-      // Перенаправляем в личный кабинет
+  
       navigate('/user');
     } catch (error) {
       console.error('Ошибка авторизации:', error.response?.data || error.message);
