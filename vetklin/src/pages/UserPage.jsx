@@ -16,7 +16,7 @@ function UserPage() {
   const username = localStorage.getItem('username');
 
   useEffect(() => {
-    // Если пользователь не авторизован, перенаправляем на страницу входа
+
     if (!localStorage.getItem('token')) {
       navigate('/');
     }
