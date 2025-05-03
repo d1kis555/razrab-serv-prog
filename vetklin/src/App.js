@@ -15,7 +15,7 @@ import UserPage from './pages/UserPage';
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Проверяем аутентификацию при загрузке приложения
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
