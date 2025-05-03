@@ -1,17 +1,43 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import logo from '../assets/image/logo.png';
 import loginIcon from '../assets/image/login-icon.png';
 import '../styles/header.css';
 
-const Header = () => {
+const Header = ({ isAuthenticated, setIsAuthenticated }) => {
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate('/');
+  };
+
+  const handleAuthClick = () => {
+    if (isAuthenticated) {
+      navigate('/user'); // Перенаправляем в личный кабинет
+    } else {
+      navigate('/login'); // Перенаправляем на страницу входа
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+    navigate('/');
+  };
+
   return (
     <header>
-     
       <div className="navbar-top">
         <div className="container">
           <div className="navbar-start">
             <div className="navbar-item">
-              <img src={logo} alt="Логотип ветеринарной клиники" className="logo" />
+              <img 
+                src={logo} 
+                alt="Логотип ветеринарной клиники" 
+                className="logo" 
+                onClick={handleLogoClick}
+                style={{ cursor: 'pointer' }}
+              />
             </div>
             <div className="navbar-item" style={{ marginLeft: '30px' }}>
               <p className="header-text">
@@ -34,15 +60,35 @@ const Header = () => {
               <button className="button is-light">Заказать звонок</button>
             </div>
             <div className="navbar-item">
-              <a href="/login" className="login-button">
-                <img src={loginIcon} alt="Иконка входа в систему" />
-              </a>
+              {isAuthenticated ? (
+                <div className="auth-buttons">
+                  <button 
+                    className="button is-light"
+                    onClick={() => navigate('/user')}
+                    style={{ marginRight: '10px' }}
+                  >
+                    Личный кабинет
+                  </button>
+                  <button 
+                    className="button is-light"
+                    onClick={handleLogout}
+                  >
+                    Выйти
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  className="login-button"
+                  onClick={handleAuthClick}
+                >
+                  <img src={loginIcon} alt="Иконка входа в систему" />
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      
       <nav className="navbar-bottom">
         <div className="container">
           <div className="navbar-menu">
