@@ -7,7 +7,7 @@
   
   .user-page-content {
     width: 100%;
-    max-width: 1280px;
+    width: 1280px;
   }
   
   .user-header {
@@ -37,6 +37,7 @@
   
   .user-content {
     flex: 1;
+    margin-top: 20px;
   }
   
   .sidebar-section {
@@ -57,7 +58,7 @@
     padding: 10px 15px;
     margin-bottom: 10px;
     border: none;
-    border-radius: 4px;
+    border-radius: 15px;
     background: #e0e0e0;
     color: #333;
     cursor: pointer;
@@ -69,12 +70,12 @@
   }
   
   .sidebar-button.primary {
-    background: #4a89dc;
+    background: #3A65BF;
     color: white;
   }
   
   .sidebar-button.primary:hover {
-    background: #3a79cc;
+    background: #3A65BF;
   }
   
   .pets-section {
@@ -135,19 +136,21 @@
   }
   
   .action-button.warning {
-    background: #f6bb42;
+    background: #3A65BF;
     color: white;
+    border-radius: 10px;
   }
   
   .action-button.warning:hover {
-    background: #e6ab32;
+    background: #2d4e96;
   }
   
   .action-button.danger {
-    background: #da4453;
+    background: #18AEA5;
     color: white;
+    border-radius: 10px;
   }
   
   .action-button.danger:hover {
-    background: #ca3443;
+    background: #13ada3;
   }

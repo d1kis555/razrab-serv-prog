@@ -39,7 +39,7 @@ function UserPage() {
         <div className="user-main">
           <div className="user-sidebar">
             <div className="sidebar-section">
-              <h3 className="sidebar-title">Меню</h3>
+              
               <button 
                 className="sidebar-button primary"
                 onClick={() => openModal('addPet')}
