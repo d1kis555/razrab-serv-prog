@@ -178,7 +178,6 @@ function CatalogPage() {
         
         <div className="header-controls">
           <div className="filter-group">
-            <label htmlFor="animal-type-filter">Вид животного:</label>
             <select
               id="animal-type-filter"
               className="filter-select"
@@ -193,7 +192,6 @@ function CatalogPage() {
           </div>
 
           <div className="filter-group">
-            <label htmlFor="breed-filter">Порода:</label>
             <select
               id="breed-filter"
               className="filter-select"
@@ -209,7 +207,6 @@ function CatalogPage() {
           </div>
 
           <div className="filter-group">
-            <label htmlFor="age-filter">Возраст:</label>
             <select
               id="age-filter"
               className="filter-select"
