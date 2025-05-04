@@ -11,6 +11,8 @@ import LoginPage from './pages/LoginPage';
 import './App.css';
 import Footer from './components/footer';
 import UserPage from './pages/UserPage';
+import CatalogPage from './pages/CatalogPage';
+import CartPage from './pages/CartPage';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -34,6 +36,8 @@ const App = () => {
             <Route path="/procedure-preparation" element={<ProcedurePreparationPage />} />
             <Route path="/vaccination" element={<VaccinationPage />} />
             <Route path="/specialist/:id" element={<SpecialistPage />} />
+            <Route path="/catalog" element={<CatalogPage />} />
+            <Route path="/cart" element={<CartPage />} />
             <Route 
               path="/login" 
               element={

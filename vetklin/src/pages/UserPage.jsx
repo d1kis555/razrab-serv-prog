@@ -79,7 +79,10 @@ function UserPage() {
               >
                 Процедуры питомца
               </button>
-              <button className="sidebar-button">Каталог продукции</button>
+              <button className="sidebar-button"
+              
+              onClick={() => navigate('/catalog')}>
+                Каталог продукции</button>
             </div>
           </div>
 
