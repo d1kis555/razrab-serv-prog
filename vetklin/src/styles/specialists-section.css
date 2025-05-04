@@ -12,12 +12,12 @@
   }
   
   .section-title {
-    font-family: 'Onest', sans-serif;
-    font-size: 45px;
-    color: #363E3E;
-    text-align: left;
-    margin-bottom: 40px;
-    font-weight: 500;
+    font-family: 'Onest', sans-serif !important;
+    font-size: 45px !important;
+    color: #363E3E !important;
+    text-align: left !important;
+    margin-bottom: 40px !important;
+    font-weight: 500 !important;
   }
   
 
