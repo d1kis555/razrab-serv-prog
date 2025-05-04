@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Экстренный вызов</title>
+</head>
+<body>
+  <h1>Ветеринарная помощь</h1>
+
+  <button id="emergencyBtn">Экстренный вызов</button>
+
+  <select id="clinicSelect" style="margin-top: 10px;">
+    <option selected disabled>Выбери филиал</option>
+  </select>
+
+  <div id="info" style="margin-top: 10px;"></div>
+
+  <div id="map" style="width: 100%; height: 500px; margin-top: 20px;"></div>
+
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+  <script>
+    let myMap;
+    let userCoords = null;
+    let clinics = [];
+
+    // Получить местоположение пользователя
+    function getUserLocation(callback) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          userCoords = [position.coords.latitude, position.coords.longitude];
+          callback();
+        });
+      } else {
+        alert('Геолокация не поддерживается');
+      }
+    }
+
+    // Загрузить клиники
+    function loadClinics() {
+      fetch('/api/clinics')
+        .then(res => res.json())
+        .then(data => {
+          clinics = data;
+          const select = document.getElementById('clinicSelect');
+          data.forEach(c => {
+            const option = document.createElement('option');
+            option.value = c.id;
+            option.textContent = c.name;
+            select.appendChild(option);
+          });
+          renderClinicsOnMap();
+        });
+    }
+
+    // Отрисовать клиники на карте
+    function renderClinicsOnMap() {
+      ymaps.ready(() => {
+        if (!myMap) {
+          myMap = new ymaps.Map("map", {
+            center: userCoords,
+            zoom: 12
+          });
+        } else {
+          myMap.geoObjects.removeAll();
+        }
+
+        myMap.geoObjects.add(new ymaps.Placemark(userCoords, {
+          balloonContent: "Вы здесь"
+        }, {
+          preset: 'islands#blueDotIcon'
+        }));
+
+        clinics.forEach(c => {
+          myMap.geoObjects.add(new ymaps.Placemark([c.lat, c.lon], {
+            balloonContent: `${c.name}`
+          }, {
+            preset: 'islands#redMedicalIcon'
+          }));
+        });
+      });
+    }
+
+    // Проложить маршрут к выбранной клинике
+    function routeToClinic(clinic) {
+      document.getElementById('info').innerHTML =
+        `<b>${clinic.name}</b><br>📍 ${clinic.address}<br>🕒 ${clinic.open[0]}:00 - ${clinic.open[1]}:00<br>📞 <a href="tel:${clinic.phone}">${clinic.phone}</a>`;
+
+      ymaps.ready(() => {
+        myMap.setCenter(userCoords, 12);
+        myMap.geoObjects.removeAll();
+
+        myMap.geoObjects.add(new ymaps.Placemark(userCoords, {
+          balloonContent: "Вы здесь"
+        }, {
+          preset: 'islands#blueDotIcon'
+        }));
+
+        myMap.geoObjects.add(new ymaps.Placemark([clinic.lat, clinic.lon], {
+          balloonContent: clinic.name
+        }, {
+          preset: 'islands#redMedicalIcon'
+        }));
+
+        ymaps.route([userCoords, [clinic.lat, clinic.lon]])
+          .then(route => myMap.geoObjects.add(route))
+          .catch(err => console.error('Ошибка маршрута', err));
+      });
+    }
+
+    // Обработка выбора из списка
+    document.getElementById('clinicSelect').addEventListener('change', (e) => {
+      const selectedId = parseInt(e.target.value);
+      const selectedClinic = clinics.find(c => c.id === selectedId);
+      if (selectedClinic) routeToClinic(selectedClinic);
+    });
+
+    // Обработка экстренного вызова
+    document.getElementById('emergencyBtn').addEventListener('click', () => {
+      fetch('/api/emergency', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lat: userCoords[0], lon: userCoords[1] })
+      })
+        .then(res => res.json())
+        .then(clinic => routeToClinic(clinic))
+        .catch(() => alert('Нет открытых клиник'));
+    });
+
+    // Инициализация
+    getUserLocation(() => {
+      loadClinics();
+    });
+  </script>
+</body>
+</html>
