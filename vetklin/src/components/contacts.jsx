@@ -39,10 +39,14 @@ const Contacts = () => {
           
        
           <div className="map-iframe-container">
-          
+  <iframe
+    src="https://yandex.ru/map-widget/v1/?um=constructor%3Aa6a73bc8c98684b7b8515b178fac43cdd40874ccae5e03e18cb09bd37578ee24&amp;source=constructor"
+    width="100%"
+    height="400"
+    frameBorder="0"
+  ></iframe>
+</div>
 
-          <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Aa6a73bc8c98684b7b8515b178fac43cdd40874ccae5e03e18cb09bd37578ee24&amp;width=900&amp;height=400&amp;lang=ru_RU&amp;scroll=true"></script>
-          </div>
         </div>
         
     
