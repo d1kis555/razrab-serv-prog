@@ -34,6 +34,7 @@ function CatalogPage() {
 
   const fetchCartCount = async () => {
     try {
+    // ЦЫМБИК ТУТ СДЕЛАТЬ НАДО
       // Здесь будет запрос к API для получения количества товаров в корзине
       // Пока используем заглушку
       setCartCount(0);
@@ -45,12 +46,12 @@ function CatalogPage() {
   const fetchBreeds = async () => {
     try {
       // Заглушка для запроса пород
-      // В реальном приложении будет запрос к API:
+      // ЦЫМБИК ТУТ СДЕЛАТЬ НАДО
       // const response = await fetch(`/api/breeds?animal_type=${filters.animalType}&product_type=${filters.productType}`);
       // const data = await response.json();
       // setBreeds(data);
       
-      // Временные данные для демонстрации
+      // Временные приколы
       const demoBreeds = {
         'Кошка': ['Британская', 'Сиамская', 'Мейн-кун'],
         'Собака': ['Лабрадор', 'Овчарка', 'Бульдог'],
@@ -67,7 +68,7 @@ function CatalogPage() {
     setLoading(true);
     try {
       // Заглушка для запроса товаров
-      // В реальном приложении будет запрос к API:
+      /// ЦЫМБИК ТУТ СДЕЛАТЬ НАДО
       // const params = new URLSearchParams();
       // params.append('type', filters.productType);
       // if (filters.animalType) params.append('animal_type', filters.animalType);
@@ -77,7 +78,7 @@ function CatalogPage() {
       // const data = await response.json();
       // setProducts(data);
       
-      // Временные данные для демонстрации
+      
       const demoProducts = [
         {
           id: 1,
@@ -115,7 +116,7 @@ function CatalogPage() {
     setLoading(true);
     try {
       // Заглушка для добавления в корзину
-      // В реальном приложении будет запрос к API:
+      // ЦЫМБИК ТУТ СДЕЛАТЬ НАДО
       // const response = await fetch('/api/cart', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
@@ -154,7 +155,7 @@ function CatalogPage() {
     setFilters(prev => ({
       ...prev,
       productType: type,
-      breed: '' // Сбрасываем фильтр породы при смене типа товара
+      breed: ''
     }));
   };
 
@@ -174,7 +175,7 @@ function CatalogPage() {
   return (
     <div className="catalog-page">
       <header className="catalog-header">
-        <h1>PetShop - Магазин товаров для питомцев</h1>
+        
         <div className="header-controls">
           <div className="filter-group">
             <label htmlFor="animal-type-filter">Вид животного:</label>

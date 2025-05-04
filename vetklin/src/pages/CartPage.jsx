@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import {
+  MdDeleteSweep,
+  MdRemove,
+  MdAdd,
+  MdDelete,
+  MdShoppingCartCheckout
+} from 'react-icons/md';
 import '../styles/CartPage.css';
 
 function CartPage() {
@@ -20,12 +27,6 @@ function CartPage() {
   const fetchCartItems = async () => {
     try {
       setLoading(true);
-      // Заглушка для API цымбик внимание обрати!!!!!
-      // const response = await fetch('/api/cart');
-      // const data = await response.json();
-      // setCartItems(data.items);
-      
-      // Временные данные для демонстрации
       const demoItems = [
         {
           id: 1,
@@ -67,16 +68,7 @@ function CartPage() {
 
     try {
       setLoading(true);
-      // Заглушка для API
-      // Цымбик вот такая темка +- должна быть тут
-      // const response = await fetch(`/api/cart/${itemId}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ quantity: newQuantity })
-      // });
-      // const data = await response.json();
-      
-      setCartItems(cartItems.map(item => 
+      setCartItems(cartItems.map(item =>
         item.id === itemId ? { ...item, quantity: newQuantity } : item
       ));
       showToast('Количество обновлено');
@@ -93,11 +85,6 @@ function CartPage() {
 
     try {
       setLoading(true);
-      // Заглушка для API
-      // ВНИМАНИЕ ОБРПАТИ ЦЫМБИК
-      // const response = await fetch(`/api/cart/${itemId}`, { method: 'DELETE' });
-      // const data = await response.json();
-      
       setCartItems(cartItems.filter(item => item.id !== itemId));
       showToast('Товар удалён из корзины');
     } catch (error) {
@@ -113,11 +100,6 @@ function CartPage() {
 
     try {
       setLoading(true);
-      // Заглушка для API
-      // ОБРАТИ ВНИМАНИЕ ЦЫМБИК
-      // const response = await fetch('/api/cart', { method: 'DELETE' });
-      // const data = await response.json();
-      
       setCartItems([]);
       showToast('Корзина очищена');
     } catch (error) {
@@ -131,11 +113,6 @@ function CartPage() {
   const checkout = async () => {
     try {
       setLoading(true);
-      // Заглушка для API
-      // ВНИМАНИЕ ОБРАТИ ЦЫБИК
-      // const response = await fetch('/api/checkout', { method: 'POST' });
-      // const data = await response.json();
-      
       showToast('Заказ успешно оформлен');
       setTimeout(() => navigate('/catalog'), 2000);
     } catch (error) {
@@ -169,7 +146,8 @@ function CartPage() {
       {cartItems.length > 0 && (
         <div className="cart-actions">
           <button className="clear-cart-btn" onClick={clearCart}>
-            <span className="material-icons">delete_sweep</span> Очистить корзину
+            <MdDeleteSweep size={20} style={{ marginRight: '6px', verticalAlign: 'middle' }} />
+            Очистить корзину
           </button>
         </div>
       )}
@@ -190,13 +168,13 @@ function CartPage() {
               </div>
               <div className="item-actions">
                 <button className="quantity-btn minus" onClick={() => updateQuantity(item.id, -1)}>
-                  <span className="material-icons">remove</span>
+                  <MdRemove />
                 </button>
                 <button className="quantity-btn plus" onClick={() => updateQuantity(item.id, 1)}>
-                  <span className="material-icons">add</span>
+                  <MdAdd />
                 </button>
                 <button className="remove-btn" onClick={() => removeCartItem(item.id)}>
-                  <span className="material-icons">delete</span>
+                  <MdDelete />
                 </button>
               </div>
             </div>
@@ -208,7 +186,8 @@ function CartPage() {
         <div className="cart-total">
           <h3>Итого: <span id="grand-total">{totalPrice.toFixed(2)}</span> руб.</h3>
           <button className="checkout-btn" onClick={checkout}>
-            <span className="material-icons">shopping_cart_checkout</span> Оформить заказ
+            <MdShoppingCartCheckout size={20} style={{ marginRight: '6px', verticalAlign: 'middle' }} />
+            Оформить заказ
           </button>
         </div>
       )}
