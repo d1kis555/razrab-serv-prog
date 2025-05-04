@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Moderation Panel</title>
+    <style>
+        .container { max-width: 1400px; margin: 20px auto; padding: 20px; }
+        .section { margin-bottom: 30px; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f9f9f9; }
+        .item { margin: 15px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background: white; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        button { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; }
+        .approve-btn { background: #4CAF50; color: white; }
+        .delete-btn { background: #f44336; color: white; }
+        .toxicity-high { color: #d32f2f; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Moderation Dashboard</h1>
+
+        <div class="grid">
+            <!-- Посты -->
+            <div class="section">
+                <h2>📝 Pending Posts ({{ posts|length }})</h2>
+                {% for post in posts %}
+                <div class="item">
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.content|truncate(200) }}</p>
+                    <small>Author: {{ post.author.email }} | {{ post.created_at }}</small>
+                    <div class="actions" style="margin-top: 10px;">
+                        <form action="/admin/moderation/posts/{{ post.id }}" method="post">
+                            <button type="submit" name="action" value="approve" class="approve-btn">✅ Approve</button>
+                            <button type="submit" name="action" value="delete" class="delete-btn">❌ Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Комментарии -->
+            <div class="section">
+                <h2>💬 Pending Comments ({{ comments|length }})</h2>
+                {% for comment in comments %}
+                <div class="item">
+                    <p>{{ comment.content|truncate(100) }}</p>
+                    <small>
+                        Author: {{ comment.author.email }} |
+                        Toxicity: <span class="toxicity-high">{{ comment.toxicity_score|round(2) }}</span>
+                    </small>
+                    <div class="actions" style="margin-top: 10px;">
+                        <form action="/admin/moderation/comments/{{ comment.id }}" method="post">
+                            <button type="submit" name="action" value="approve" class="approve-btn">✅ Approve</button>
+                            <button type="submit" name="action" value="delete" class="delete-btn">❌ Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Жалобы -->
+            <div class="section">
+                <h2>🚨 Pending Reports ({{ reports|length }})</h2>
+                {% for report in reports %}
+                <div class="item">
+                    <p><strong>Reason:</strong> {{ report.reason }}</p>
+                    <small>Reporter: {{ report.reporter.email }} | {{ report.created_at }}</small>
+                    <div class="actions" style="margin-top: 10px;">
+                        <!-- Добавьте обработку жалоб -->
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

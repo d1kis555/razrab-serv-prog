@@ -1,19 +1,35 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
+import os
+from dotenv import load_dotenv
 
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:123@localhost:5432/adminpanel"
+load_dotenv()
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+# Базовые классы для разных БД
+BaseAdmin = declarative_base()
+BaseForum = declarative_base()
 
-def create_tables():
-    Base.metadata.create_all(bind=engine)
+# Движки для подключения
+engine_admin = create_engine(os.getenv("DATABASE_URL_ADMIN"))
+engine_forum = create_engine(os.getenv("DATABASE_URL_FORUM"))
 
-def get_db():
-    db = SessionLocal()
+# Сессии
+SessionAdmin = sessionmaker(bind=engine_admin)
+SessionForum = sessionmaker(bind=engine_forum)
+
+def get_admin_db():
+    db = SessionAdmin()
     try:
         yield db
     finally:
         db.close()
+
+def get_forum_db():
+    db = SessionForum()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# Для обратной совместимости (если нужно)
+get_db = get_admin_db  # Добавьте эту строку

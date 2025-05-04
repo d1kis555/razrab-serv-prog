@@ -1,115 +1,93 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from datetime import date, timedelta
-from app.database import get_db
-from app import models, schemas
 from typing import List
+from app.database import get_db
+from app.models_admin import Doctor, DoctorSchedule, ScheduleException
+from app import schemas
+from app.routers.auth import get_current_admin
 from dateutil.relativedelta import relativedelta
 from sqlalchemy.exc import IntegrityError
+from app.utils.validation import validate_doctor_hours
 
 router = APIRouter(prefix="/doctors/{doctor_id}/schedule", tags=["Schedule"])
 
-
 def validate_time_range(start: str, end: str):
-    """Проверка временного интервала с учетом ночных смен"""
-    if start >= end and end != "00:00":
+    try:
+        start_h, start_m = map(int, start.split(':'))
+        end_h, end_m = map(int, end.split(':'))
+    except ValueError:
         raise HTTPException(
             status_code=400,
-            detail="Start time must be before end time (use 00:00 for night shifts)"
+            detail="Некорректный формат времени. Используйте ЧЧ:ММ"
         )
+    validate_doctor_hours(start, end)
 
-
-async def get_doctor_or_404(
-        doctor_id: int,
-        db: Session = Depends(get_db)
-) -> models.Doctor:
-    doctor = db.query(models.Doctor).get(doctor_id)
+async def get_doctor_or_404(doctor_id: int, db: Session = Depends(get_db)) -> Doctor:
+    doctor = db.query(Doctor).get(doctor_id)
     if not doctor:
-        raise HTTPException(status_code=404, detail="Doctor not found")
+        raise HTTPException(status_code=404, detail="Доктор не найден")
     return doctor
-
 
 @router.post(
     "/regular",
-    response_model=schemas.RegularSchedule,
+    response_model=schemas.RegularScheduleOut,
     status_code=status.HTTP_201_CREATED,
     summary="Добавить регулярное расписание"
 )
 def add_regular_schedule(
         schedule: schemas.RegularScheduleCreate,
-        doctor: models.Doctor = Depends(get_doctor_or_404),
+        doctor: Doctor = Depends(get_doctor_or_404),
         db: Session = Depends(get_db)
 ):
-    # Валидация дней недели
     if schedule.start_day > schedule.end_day:
-        raise HTTPException(
-            status_code=400,
-            detail="End day must be >= start day"
-        )
-
-    # Валидация дат
+        raise HTTPException(400, "Конечный день должен быть >= начального")
     if schedule.valid_to < schedule.valid_from:
-        raise HTTPException(
-            status_code=400,
-            detail="End date must be >= start date"
-        )
+        raise HTTPException(400, "Конечная дата должна быть >= начальной")
 
     validate_time_range(schedule.start_time, schedule.end_time)
 
-    # Проверка пересечений
-    overlapping = db.query(models.DoctorSchedule).filter(
-        models.DoctorSchedule.doctor_id == doctor.id,
-        models.DoctorSchedule.valid_from <= schedule.valid_to,
-        models.DoctorSchedule.valid_to >= schedule.valid_from
+    overlapping = db.query(DoctorSchedule).filter(
+        DoctorSchedule.doctor_id == doctor.id,
+        DoctorSchedule.valid_from <= schedule.valid_to,
+        DoctorSchedule.valid_to >= schedule.valid_from
     ).first()
-
     if overlapping:
-        raise HTTPException(
-            status_code=409,
-            detail="Schedule overlaps with existing"
-        )
+        raise HTTPException(409, "Пересечение с существующим расписанием")
 
-    db_schedule = models.DoctorSchedule(
-        **schedule.dict(),
-        doctor_id=doctor.id
-    )
+    db_schedule = DoctorSchedule(**schedule.model_dump(), doctor_id=doctor.id)
     db.add(db_schedule)
     db.commit()
     db.refresh(db_schedule)
-    return db_schedule
-
+    return schemas.RegularScheduleOut.model_validate(db_schedule)
 
 @router.post(
     "/bulk-exceptions",
-    response_model=List[schemas.ScheduleException],
-    summary="Добавить несколько исключений",
+    response_model=List[schemas.ScheduleExceptionOut],
+    summary="Добавить исключения",
     status_code=status.HTTP_201_CREATED
 )
 def add_bulk_exceptions(
         exceptions: List[schemas.ScheduleExceptionCreate],
-        doctor: models.Doctor = Depends(get_doctor_or_404),
+        doctor: Doctor = Depends(get_doctor_or_404),
         db: Session = Depends(get_db)
 ):
-    new_exceptions = []
     existing_dates = {
-        ex.date for ex in db.query(models.ScheduleException)
+        ex.date for ex in db.query(ScheduleException)
         .filter(
-            models.ScheduleException.doctor_id == doctor.id,
-            models.ScheduleException.date.in_([e.date for e in exceptions])
+            ScheduleException.doctor_id == doctor.id,
+            ScheduleException.date.in_([e.date for e in exceptions])
         ).all()
     }
 
+    new_exceptions = []
     for exc in exceptions:
         if exc.date in existing_dates:
             continue
-
         if exc.is_working:
             validate_time_range(exc.start_time, exc.end_time)
 
-        db_exc = models.ScheduleException(
-            **exc.dict(exclude_unset=True),
-            doctor_id=doctor.id
-        )
+        db_exc = ScheduleException(**exc.model_dump(), doctor_id=doctor.id)
         db.add(db_exc)
         new_exceptions.append(db_exc)
 
@@ -117,28 +95,21 @@ def add_bulk_exceptions(
         db.commit()
     except IntegrityError as e:
         db.rollback()
-        raise HTTPException(
-            status_code=400,
-            detail=f"Database error: {str(e)}"
-        )
+        raise HTTPException(400, f"Ошибка БД: {str(e)}")
 
-    for exc in new_exceptions:
-        db.refresh(exc)
-
-    return new_exceptions
-
+    return [schemas.ScheduleExceptionOut.model_validate(ex) for ex in new_exceptions]
 
 @router.get(
     "/{year}/{month}",
-    response_model=List[schemas.DailySchedule],
-    summary="Получить расписание на месяц"
+    response_model=List[schemas.DailyScheduleOut],
+    summary="Расписание на месяц"
 )
 def get_monthly_schedule(
         doctor_id: int,
         year: int,
         month: int,
         db: Session = Depends(get_db),
-        doctor: models.Doctor = Depends(get_doctor_or_404)
+        doctor: Doctor = Depends(get_doctor_or_404)
 ):
     def last_day_of_month(d: date) -> date:
         return (d.replace(day=28) + relativedelta(days=4)).replace(day=1) - timedelta(days=1)
@@ -146,15 +117,15 @@ def get_monthly_schedule(
     start_date = date(year, month, 1)
     end_date = last_day_of_month(start_date)
 
-    schedules = db.query(models.DoctorSchedule).filter(
-        models.DoctorSchedule.doctor_id == doctor.id,
-        models.DoctorSchedule.valid_from <= end_date,
-        models.DoctorSchedule.valid_to >= start_date
-    ).order_by(models.DoctorSchedule.valid_from).all()
+    schedules = db.query(DoctorSchedule).filter(
+        DoctorSchedule.doctor_id == doctor.id,
+        DoctorSchedule.valid_from <= end_date,
+        DoctorSchedule.valid_to >= start_date
+    ).order_by(DoctorSchedule.valid_from).all()
 
-    exceptions = db.query(models.ScheduleException).filter(
-        models.ScheduleException.doctor_id == doctor.id,
-        models.ScheduleException.date.between(start_date, end_date)
+    exceptions = db.query(ScheduleException).filter(
+        ScheduleException.doctor_id == doctor.id,
+        ScheduleException.date.between(start_date, end_date)
     ).all()
 
     result = []
@@ -162,7 +133,7 @@ def get_monthly_schedule(
     exceptions_map = {ex.date: ex for ex in exceptions}
 
     while current_date <= end_date:
-        entry = schemas.DailySchedule(
+        entry = schemas.DailyScheduleOut(
             date=current_date,
             working=False,
             start_time=None,
@@ -170,7 +141,6 @@ def get_monthly_schedule(
             reason=None
         )
 
-        # Обработка исключений
         if current_date in exceptions_map:
             ex = exceptions_map[current_date]
             entry.reason = ex.reason
@@ -178,8 +148,6 @@ def get_monthly_schedule(
                 entry.working = True
                 entry.start_time = ex.start_time
                 entry.end_time = ex.end_time
-
-        # Поиск регулярного расписания
         else:
             for sched in schedules:
                 if (sched.valid_from <= current_date <= sched.valid_to and
@@ -194,34 +162,26 @@ def get_monthly_schedule(
 
     return result
 
-
 @router.delete(
     "/regular/{schedule_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Удалить расписание"
 )
-def delete_regular_schedule(
-        schedule_id: int,
-        db: Session = Depends(get_db)
-):
-    schedule = db.query(models.DoctorSchedule).get(schedule_id)
+def delete_regular_schedule(schedule_id: int, db: Session = Depends(get_db)):
+    schedule = db.query(DoctorSchedule).get(schedule_id)
     if not schedule:
-        raise HTTPException(status_code=404, detail="Schedule not found")
+        raise HTTPException(404, "Расписание не найдено")
     db.delete(schedule)
     db.commit()
-
 
 @router.delete(
     "/exception/{exception_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Удалить исключение"
 )
-def delete_exception(
-        exception_id: int,
-        db: Session = Depends(get_db)
-):
-    exception = db.query(models.ScheduleException).get(exception_id)
+def delete_exception(exception_id: int, db: Session = Depends(get_db)):
+    exception = db.query(ScheduleException).get(exception_id)
     if not exception:
-        raise HTTPException(status_code=404, detail="Exception not found")
+        raise HTTPException(404, "Исключение не найдено")
     db.delete(exception)
     db.commit()
