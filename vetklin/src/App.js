@@ -13,11 +13,11 @@ import Footer from './components/footer';
 import UserPage from './pages/UserPage';
 import CatalogPage from './pages/CatalogPage';
 import CartPage from './pages/CartPage';
-
+import ClientsPage from './pages/ClientsPage';
 
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
-
+import AboutPage from './pages/AboutPage';
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
@@ -45,8 +45,8 @@ const App = () => {
             <Route path="/specialist/:id" element={<SpecialistPage />} />
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/cart" element={<CartPage />} />
-
-          
+            <Route path="/clients" element={<ClientsPage />} />
+            <Route path="/about" element={<AboutPage />} />
             <Route 
               path="/login" 
               element={
