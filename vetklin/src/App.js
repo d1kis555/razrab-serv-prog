@@ -14,22 +14,29 @@ import UserPage from './pages/UserPage';
 import CatalogPage from './pages/CatalogPage';
 import CartPage from './pages/CartPage';
 
+
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
+
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const adminToken = localStorage.getItem('adminToken');
     setIsAuthenticated(!!token);
+    setIsAdminAuthenticated(!!adminToken);
   }, []);
 
   return (
     <Router>
       <div className="app">
         <Header isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
-        
+
         <main className="main-content">
           <Routes>
+ 
             <Route path="/" element={<HomePage isAuthenticated={isAuthenticated} />} />
             <Route path="/online-consultation" element={<OnlineConsultationPage />} />
             <Route path="/routine-checkup" element={<RoutineCheckupPage />} />
@@ -38,6 +45,8 @@ const App = () => {
             <Route path="/specialist/:id" element={<SpecialistPage />} />
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/cart" element={<CartPage />} />
+
+          
             <Route 
               path="/login" 
               element={
@@ -58,8 +67,31 @@ const App = () => {
                 )
               } 
             />
+
+            
+            <Route 
+              path="/admin/login" 
+              element={
+                isAdminAuthenticated ? (
+                  <Navigate to="/admin" replace />
+                ) : (
+                  <AdminLogin setIsAdminAuthenticated={setIsAdminAuthenticated} />
+                )
+              } 
+            />
+            <Route 
+              path="/admin" 
+              element={
+                isAdminAuthenticated ? (
+                  <AdminDashboard setIsAdminAuthenticated={setIsAdminAuthenticated} />
+                ) : (
+                  <Navigate to="/admin/login" replace />
+                )
+              } 
+            />
           </Routes>
         </main>
+
         <Footer />
       </div>
     </Router>

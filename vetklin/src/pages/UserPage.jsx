@@ -89,7 +89,7 @@ function UserPage() {
           <div className="user-content">
             {activeTab === 'pets' ? (
               <div className="pets-section">
-                <h3 className="section-title">Ваши питомцы</h3>
+                <h3 className="section-title2">Ваши питомцы</h3>
                 {pets.length === 0 ? (
                   <p className="no-pets-message">У вас пока нет добавленных питомцев</p>
                 ) : (
@@ -115,7 +115,7 @@ function UserPage() {
             ) : activeTab === 'reminders' ? (
               <div className="reminders-section">
                 <div className="section-header">
-                  <h3 className="section-title">Напоминания</h3>
+                  <h3 className="section-title2">Напоминания</h3>
                   <button 
                     className="action-button primary"
                     onClick={() => openModal('addReminder')}
@@ -148,7 +148,7 @@ function UserPage() {
             ) : (
               <div className="procedures-section">
                 <div className="section-header">
-                  <h3 className="section-title">Процедуры</h3>
+                  <h3 className="section-title2">Процедуры</h3>
                   <button 
                     className="action-button primary"
                     onClick={() => openModal('addProcedure')}
